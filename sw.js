@@ -1,18 +1,22 @@
 var cacheName = 'wishlist';
 var assets = [
-  '/',
-  '/index.html',
-  '/css/style.css'
-  '/js/main.js'
+  './',
+  './index.html',
+  './css/style.css',
+  './js/main.js'
 ];
 
 self.addEventListener('install', function(e) {
   e.waitUntil(
     caches.open(cacheName).then(function(cache) {
-      return cache.addAll(assets);
+      assets.map(function(url) {
+        cache.add(url)
+          .catch(function(error) {
+            console.log("Unable to cache file: %s, error: %s", url, error);
+          })
+      })
     })
   );
-  self.skipWaiting();
 });
 
 self.addEventListener('fetch', function(e) {
